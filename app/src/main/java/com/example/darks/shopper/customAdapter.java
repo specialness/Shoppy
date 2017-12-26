@@ -47,7 +47,7 @@ public class customAdapter extends ArrayAdapter<Product> {
         {
             String imagepath = RetrofitApi.BASE_URL+ products.get(position).getImagePath();
             Log.e(TAG, "getView: "+imagepath );
-            //simpleDraweeView.setImageURI(imagepath);
+            simpleDraweeView.setImageURI(imagepath);
         }
         if(title!=null)
         {
@@ -55,11 +55,11 @@ public class customAdapter extends ArrayAdapter<Product> {
         }
         if(quantity!=null)
         {
-            quantity.setText(Integer.toString(products.get(position).getQuantity()));
+            quantity.setText(String.format("Qty: %d",products.get(position).getQuantity()) );
         }
         if(price!=null)
         {
-            price.setText(Double.toString(products.get(position).getPrice()));
+            price.setText(String.format("price: %.2f $",products.get(position).getPrice()));
         }
         return v;
     }
