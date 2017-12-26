@@ -1,12 +1,13 @@
 package com.example.darks.shopper;
 
+import android.util.Log;
 import android.widget.AbsListView;
 
 
 public abstract class LazyLoader implements AbsListView.OnScrollListener {
 
-    private static final int DEFAULT_THRESHOLD = 10 ;
-
+    private static final int DEFAULT_THRESHOLD = 7 ;
+    private static final String TAG = "LazyLoader";
     private boolean loading = true  ;
     private int previousTotal = 0 ;
     private int threshold = DEFAULT_THRESHOLD ;
@@ -37,6 +38,7 @@ public abstract class LazyLoader implements AbsListView.OnScrollListener {
             loading = true ;
 
             // List needs more data. Go fetch !!
+            Log.e(TAG, "onScroll: "+visibleItemCount);
             loadMore(view, firstVisibleItem,
                     visibleItemCount, totalItemCount);
         }

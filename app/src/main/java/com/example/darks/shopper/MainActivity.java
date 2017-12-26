@@ -22,8 +22,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     ListView lstview;
     SwipeRefreshLayout srl;
-    //TODO:: verify the layloading by adding more items to db
-    //TODO:: add a scrolllistener to the listview so when end is reached, fetch more items
+    //TODO:: add a scrolllistener to the listview so when end is reached, fetch more items(bookmarked vid)
     //TODO:: add a navigationView with categories and sign in
     //TODO:: add a billing API
     @Override
@@ -43,11 +42,20 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         refreshList(lstview);
+        //TODO:: fix this listener
         lstview.setOnScrollListener(new LazyLoader() {
             @Override
             public void loadMore(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                Product p = (Product)lstview.getItemAtPosition(totalItemCount-1);
-                Log.e(TAG, "loadMore: "+p.getID());
+                ListView v = (ListView)view;
+                Product p = (Product) v.getItemAtPosition(totalItemCount-1);
+                Log.e(TAG, "loadMore: "+p.getID() );
+                List<Product> prods = getProds(p.getID());
+                if(prods!=null)
+                {
+                    customAdapter adp = (customAdapter) v.getAdapter();
+                    adp.addProducts(prods);
+                    adp.notifyDataSetChanged();
+                }
             }
         });
     }
@@ -58,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         RetrofitApi retrofitapi = retro.create(RetrofitApi.class);
-        Call<List<Product>> callproducts = retrofitapi.getProducts();
+        Call<List<Product>> callproducts = retrofitapi.getProducts(0);
         callproducts.enqueue(new Callback<List<Product>>() {
             @Override
             public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
@@ -70,8 +78,32 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<Product>> call, Throwable t) {
+                Log.e(TAG, "onFailure: "+t.getMessage() );
+                Toast.makeText(getApplicationContext(),"error "+t,Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+    public  List<Product> getProds(int startfrom)
+    {
+        Retrofit retro = new Retrofit.Builder()
+                .baseUrl(RetrofitApi.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        final List<Product>[] products = new List[1];
+        RetrofitApi retrofitapi = retro.create(RetrofitApi.class);
+        Call<List<Product>> callproducts = retrofitapi.getProducts(startfrom);
+        callproducts.enqueue(new Callback<List<Product>>() {
+            @Override
+            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                 products[0] = response.body();
+            }
+
+            @Override
+            public void onFailure(Call<List<Product>> call, Throwable t) {
+                Log.e(TAG, "onFailure: "+t.getCause() );
                 Toast.makeText(getApplicationContext(),"error "+t.getCause(),Toast.LENGTH_SHORT).show();
             }
         });
+        return products[0];
     }
 }

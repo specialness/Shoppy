@@ -4,6 +4,7 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Query;
 
 
 public interface RetrofitApi {
@@ -11,4 +12,7 @@ public interface RetrofitApi {
 
     @GET("connection.php")
     Call<List<Product>> getProducts();
+
+    @GET("connection.php")
+    Call<List<Product>> getProducts(@Query("startfrom") int startfrom);
 }
