@@ -18,6 +18,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     ListView lstview;
+    //TODO:: add a pullToRefreshView that reloads things when refreshed
+    //TODO:: add a scrolllistener to the listview so when end is reached, fetch more items
+    //TODO:: add a navigationView with categories and sign in
+    //TODO:: add a billing API
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
