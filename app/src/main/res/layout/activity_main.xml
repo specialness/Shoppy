@@ -1,12 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ListView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.SwipeRefreshLayout
+    android:id="@+id/refreshList"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/listViewProducts"
+
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:listitem="@layout/product"
-    tools:context="com.example.darks.shopper.MainActivity">
 
+    tools:context="com.example.darks.shopper.MainActivity">
+<ListView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/listViewProducts"
+    tools:listitem="@layout/product">
 
 </ListView>
+
+</android.support.v4.widget.SwipeRefreshLayout>
